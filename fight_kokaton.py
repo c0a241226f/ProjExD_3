@@ -140,17 +140,22 @@ class Bomb:
         self.rct.move_ip(self.vx, self.vy)
         screen.blit(self.img, self.rct)
 
- #class Score: # 演習課題1
+class Score: # 演習課題1
     """
     スコアに関するクラス
     """
-    """ def __init__(self, fonto:int):
-        self.fonto = pg.fonto.SysFont("hgp創英角ﾎﾟｯﾌﾟ体",30)
-        self.fonto = pg.fonto.Syscolor("(0,0,255)")
-        self.img = self.fonto.render("スコア：", 0,(0,0,255))
-    def update(self,screen:pg.Surface):
-        None
-        screen.blit(self.img, self.rct)   """ 
+    def __init__(self, score):
+        self.rct: pg.Rect = self.img.get_rect()
+        self.rct.center = score
+        self.score = int(0)
+        self.score = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体",30)
+        # self.fonto = pg.fonto.Syscolor("(0,0,255)")
+        #self.img = self.score.render("スコア:"+str(score), 0,(0,0,255))
+
+
+    def update(self,screen:pg.Surface,score):
+        self.img = self.score.render("スコア:"+str(score), 0,(0,0,255))
+        screen.blit(self.img,[100,600],self.rct) 
 
 
 
@@ -161,9 +166,9 @@ def main():
     bird = Bird((300, 200))
     # bomb = Bomb((255, 0, 0), 10)
     bombs = [Bomb((255,0,0),10) for _ in range(NUM_OF_BOMBS)]
-
+    score = 0
     beam = None
-     # score = Score(0,0)
+    score = Score(score)
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -195,16 +200,19 @@ def main():
                      beam = None  # ビームを消す
                      # bomb = None  # 爆弾を消す     
                      bombs[j] = None
-             bombs = [bomb for bomb in bombs if bomb is not None]        
+                     score += 1 #スコアの加算
+             bombs = [bomb for bomb in bombs if bomb is not None]  
+
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
+        score.update(screen)
 
         if beam is not None:
             beam.update(screen)
         for bomb in bombs:       
             bomb.update(screen)
 
-        #よろこび    
+        # よろこび    
         """ for bomb in bombs:
             bird.change_img(6, screen)
             pg.display.update()
