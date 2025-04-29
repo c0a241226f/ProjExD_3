@@ -127,7 +127,7 @@ class Bomb:
         self.rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
         self.vx, self.vy = +5, +5
 
-    def update(self, screen: pg.Surface):
+    def update(self, screen: pg.Surface ):
         """
         爆弾を速度ベクトルself.vx, self.vyに基づき移動させる
         引数 screen：画面Surface
@@ -145,8 +145,8 @@ class Score: # 演習課題1
     スコアに関するクラス
     """
     def __init__(self, score):
-        self.rct: pg.Rect = self.img.get_rect()
         self.rct.center = score
+        self.rct: pg.Rect = self.img.get_rect()
         self.score = int(0)
         self.score = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体",30)
         # self.fonto = pg.fonto.Syscolor("(0,0,255)")
