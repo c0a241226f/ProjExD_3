@@ -84,29 +84,29 @@ class Bird:
         screen.blit(self.img, self.rct)
 
 
-# ビームクラス:
-    # """
-    # こうかとんが放つビームに関するクラス
-    # """
-    # def イニシャライザ(self, bird:"Bird"):
-    #     """
-    #     ビーム画像Surfaceを生成する
-    #     引数 bird：ビームを放つこうかとん（Birdインスタンス）
-    #     """
-    #     self.img = pg.画像のロード(f"fig/beam.png")
-    #     self.rct = self.img.Rectの取得()
-    #     self.ビームの中心縦座標 = こうかとんの中心縦座標
-    #     self.ビームの左座標 = こうかとんの右座標
-    #     self.vx, self.vy = +5, 0
+class Beam:
+    """
+    こうかとんが放つビームに関するクラス
+    """
+    def __init__(self, bird:"Bird"):
+        """
+        ビーム画像Surfaceを生成する
+        引数 bird：ビームを放つこうかとん（Birdインスタンス）
+        """
+        self.img = pg.image.load(f"fig/beam.png") # こうかとんsurface
+        self.rct = self.img.get_rect() #こうかとんrect
+        self.rct.center = bird.rct.center    # こうかとんの中心縦座標
+        self.rct.left = bird.rct.left        # こうかとんの右座標
+        self.vx, self.vy = +5, 0
 
-    # def update(self, screen: pg.Surface):
-    #     """
-    #     ビームを速度ベクトルself.vx, self.vyに基づき移動させる
-    #     引数 screen：画面Surface
-    #     """
-    #     if check_bound(self.rct) == (True, True):
-    #         self.rct.move_ip(self.vx, self.vy)
-    #         screen.blit(self.img, self.rct)    
+    def update(self, screen: pg.Surface):
+        """
+        ビームを速度ベクトルself.vx, self.vyに基づき移動させる
+        引数 screen：画面Surface
+        """
+        if check_bound(self.rct) == (True, True):
+            self.rct.move_ip(self.vx, self.vy)
+            screen.blit(self.img, self.rct)    
 
 
 class Bomb:
@@ -139,17 +139,17 @@ class Bomb:
         self.rct.move_ip(self.vx, self.vy)
         screen.blit(self.img, self.rct)
 
-class Score:
+ #class Score: # 演習課題1
     """
     スコアに関するクラス
     """
-    def __init__(self, fonto:int):
+    """ def __init__(self, fonto:int):
         self.fonto = pg.fonto.SysFont("hgp創英角ﾎﾟｯﾌﾟ体",30)
         self.fonto = pg.fonto.Syscolor("(0,0,255)")
         self.img = self.fonto.render("スコア：", 0,(0,0,255))
     def update(self,screen:pg.Surface):
         None
-        screen.blit(self.img, self.rct)   
+        screen.blit(self.img, self.rct)   """ 
 
 
 
@@ -159,16 +159,17 @@ def main():
     bg_img = pg.image.load("fig/pg_bg.jpg")
     bird = Bird((300, 200))
     bomb = Bomb((255, 0, 0), 10)
-    score = Score(0,0)
+    beam = None
+     # score = Score(0,0)
     clock = pg.time.Clock()
     tmr = 0
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
-            # if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-            #     # スペースキー押下でBeamクラスのインスタンス生成
-            #     beam = Beam(bird)            
+            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                # スペースキー押下でBeamクラスのインスタンス生成
+                beam = Beam(bird)            
         screen.blit(bg_img, [0, 0])
         
         if bird.rct.colliderect(bomb.rct):
@@ -180,7 +181,8 @@ def main():
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
-        # beam.update(screen)   
+        if beam is not None:
+            beam.update(screen)   
         bomb.update(screen)
         pg.display.update()
         tmr += 1
