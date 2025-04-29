@@ -192,6 +192,13 @@ def main():
             beam.update(screen)
         if bomb is not None:       
             bomb.update(screen)
+        #よろこび    
+        if bomb is None:
+            bird.change_img(6, screen)
+            pg.display.update()
+            time.sleep(1)
+            return
+
         pg.display.update()
         tmr += 1
         clock.tick(50)
