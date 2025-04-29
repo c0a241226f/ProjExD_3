@@ -205,7 +205,7 @@ def main():
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
-        score.update(screen)
+        score.update(screen,score)
 
         if beam is not None:
             beam.update(screen)
