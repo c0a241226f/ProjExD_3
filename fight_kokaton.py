@@ -141,22 +141,21 @@ class Bomb:
         screen.blit(self.img, self.rct)
 
 class Score: # 演習課題1
-    """
-    スコアに関するクラス
-    """
-    def __init__(self, score):
-        self.rct: pg.Rect = self.img.get_rect()
-        self.rct.center = score
-        self.score = int(0)
-        self.score = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体",30)
+    #スコアに関するクラス
+    def __init__(self):
+        self.color = (0,0,255)
+        self.score = 0
+        self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体",30)
+        self.img = self.fonto.render(f"スコア:{self.score}",True,self.color)
+        self.rct = self.img.get_rect()
+        self.rct.topleft = (100, HEIGHT-50)
         # self.fonto = pg.fonto.Syscolor("(0,0,255)")
         #self.img = self.score.render("スコア:"+str(score), 0,(0,0,255))
 
 
-    def update(self,screen:pg.Surface,score):
-        self.img = self.score.render("スコア:"+str(score), 0,(0,0,255))
-        screen.blit(self.img,[100,600],self.rct) 
-
+    def update(self,screen:pg.Surface):
+        self.img = self.fonto.render(f"スコア:{self.score}", True,self.color)
+        screen.blit(self.img,self.rct) 
 
 
 def main():
@@ -168,7 +167,7 @@ def main():
     bombs = [Bomb((255,0,0),10) for _ in range(NUM_OF_BOMBS)]
     score = 0
     beam = None
-    score = Score(score)
+    score = Score()
     clock = pg.time.Clock()
     tmr = 0
     while True:
@@ -200,7 +199,7 @@ def main():
                      beam = None  # ビームを消す
                      # bomb = None  # 爆弾を消す     
                      bombs[j] = None
-                     score += 1 #スコアの加算
+                     score.score += 1 #スコアの加算
              bombs = [bomb for bomb in bombs if bomb is not None]  
 
         key_lst = pg.key.get_pressed()
